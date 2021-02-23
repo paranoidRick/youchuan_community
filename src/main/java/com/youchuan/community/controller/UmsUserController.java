@@ -55,4 +55,9 @@ public class UmsUserController {
         return ApiResult.success(user);
     }
 
+    @GetMapping("/logout")
+    public ApiResult<Object> logout() {
+        return ApiResult.success(null,"注销成功");
+    }
+
 }
