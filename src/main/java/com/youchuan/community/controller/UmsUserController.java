@@ -9,7 +9,7 @@ import com.youchuan.community.model.entity.UmsUser;
 import com.youchuan.community.service.impl.IUmsUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import static com.youchuan.community.jwt.JwtUtil.USER_NAME;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +38,7 @@ public class UmsUserController {
     }
 
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping("/login")
     public ApiResult<Map<String, String>> login(@Valid @RequestBody LoginDTO dto) {
         String token = iUmsUserService.executeLogin(dto);
         if (ObjectUtils.isEmpty(token)) {
@@ -47,6 +47,12 @@ public class UmsUserController {
         Map<String, String> map = new HashMap<>(16);
         map.put("token", token);
         return ApiResult.success(map, "登录成功");
+    }
+
+    @GetMapping("/info")
+    public ApiResult<UmsUser> getUser(@RequestHeader(value = USER_NAME) String userName) {
+        UmsUser user = iUmsUserService.getUserByUsername(userName);
+        return ApiResult.success(user);
     }
 
 }
